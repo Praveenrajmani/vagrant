@@ -6,7 +6,7 @@ This guide helps to setup a 4 node k8s cluster using k3s and also provides guide
 
 This guide expects the following components to be installed
 
-- KVM and its utilities :-
+#### KVM and its utilities :-
 
 ```sh
 sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
@@ -18,7 +18,7 @@ Verify the installation using
 virsh list --all
 ```
 
-- Start libvirtd service
+#### Start libvirtd service
 
 ```sh
 sudo systemctl enable --now libvirtd
@@ -30,7 +30,7 @@ Verify by checking the status
 sudo systemctl status libvirtd
 ```
 
-- Install virt-manager
+#### Install virt-manager
 
 ```sh
 sudo apt install virt-manager
@@ -42,7 +42,7 @@ Verify by starting the GUI
 sudo virt-manager
 ```
 
-- Install vagrant
+#### Install vagrant
 
 ```sh
  wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
@@ -55,14 +55,14 @@ sudo virt-manager
 
 ### Spin up VMs using vagrant
 
-- Clone the repository
+#### Clone the repository
 
 ```sh
 git clone 
 cd vagrant
 ```
 
-- Spin up VMs using vagrant
+#### Spin up VMs using vagrant
 
 ```sh
 vagrant up
@@ -92,43 +92,43 @@ id       name   provider state   directory
 
 - Setup k3s on master
 
-(*) ssh into the master node 
+#### SSH into the master node
 
 ```sh
 vagrant ssh master
 ```
 
-(*) setup k3s
+#### Setup k3s
 
 ```sh
 curl -sfL https://get.k3s.io | sh -
 ```
 
-(*) save the kubeconfig
+#### Save the kubeconfig
 
 ```sh
 cat /etc/rancher/k3s/k3s.yaml
 ```
 
-(*) copy the k3s token from the master node (to be used later)
+#### Copy the k3s token from the master node (to be used later)
 
 ```sh
 cat /var/lib/rancher/k3s/server/node-token
 ```
 
-(*) make a note of the master's ip
+#### Make a note of the master's ip
 
 ```sh
 ip a s
 ```
 
-- Setup k3s on worker nodes (to be executed on each worker node)
+### Setup k3s on worker nodes (to be executed on each worker node)
 
 ```sh
 curl -sfL https://get.k3s.io | K3S_URL=https://<ip_of_the_master_node>:6443 K3S_TOKEN=<copied_token_from_master> sh -
 ```
 
-(*) Add the following host entries in `/etc/hosts/`
+#### Add the following host entries in `/etc/hosts/`
 
 ```sh
 100.0.0.1 master.k8s.com master
@@ -140,9 +140,9 @@ curl -sfL https://get.k3s.io | K3S_URL=https://<ip_of_the_master_node>:6443 K3S_
 
 (the master can also update the host entries accordingly)
 
-- Check the cluster's health
+### Check the cluster's health
 
-(*) Configure the kubectl in your client/host machine pointing to the cluster
+#### Configure the kubectl in your client/host machine pointing to the cluster
 
 Eg,
 
@@ -150,7 +150,7 @@ Eg,
 export KUBECONFIG=k3s.yaml
 ```
 
-(*) Check the status of the nodes by
+#### Check the status of the nodes by
 
 ```sh
 kubectl get nodes
@@ -220,5 +220,3 @@ To detach the device,
 ```sh
 sudo virsh detach-device vagrant_node1 <file>.xml
 ```
-
-
